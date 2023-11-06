@@ -1,0 +1,151 @@
+# Data parameters
+data: null
+data_dir: "/data_hdd1/users/Talha/inat2021/"
+dataset: ''
+train_split: train
+val_split: validation
+dataset_download: false
+class_map: ''
+
+# Model parameters
+model: maxvit_base_tf_224.in1k
+pretrained: true
+initial_checkpoint: ''
+local_pretrained: ''
+resume: ''
+no_resume_opt: false
+pretrained_num_classes: null
+num_classes: 4271
+gp: null
+img_size: null
+in_chans: null
+input_size: null
+crop_pct: null
+mean: null
+std: null
+interpolation: ''
+batch_size: 16
+validation_batch_size: null
+channels_last: false
+fuser: ''
+grad_accum_steps: 1
+grad_checkpointing: false
+fast_norm: false
+model_kwargs: {}
+head_init_scale: null
+head_init_bias: null
+
+# Scripting / codegen
+torchscript: false
+torchcompile: null
+
+# Optimizer parameters
+opt: adam
+opt_eps: null
+opt_betas: null
+momentum: 0.9
+weight_decay: 2.0e-5
+clip_grad: null
+clip_mode: norm
+layer_decay: null
+opt_kwargs: {}
+
+# Learning rate schedule parameters
+sched: cosine
+sched_on_updates: false
+lr: 0.001
+lr_base: 0.1
+lr_base_size: 256
+lr_base_scale: ''
+lr_noise: null
+lr_noise_pct: 0.67
+lr_noise_std: 1.0
+lr_cycle_mul: 1.0
+lr_cycle_decay: 0.5
+lr_cycle_limit: 1
+lr_k_decay: 1.0
+warmup_lr: 1.0e-3
+min_lr: 0
+epochs: 30
+epoch_repeats: 0.0
+start_epoch: null
+decay_milestones: 
+- 90
+- 180
+- 270
+decay_epochs: 90
+warmup_epochs: 5
+warmup_prefix: false
+cooldown_epochs: 0
+patience_epochs: 10
+decay_rate: 0.1
+
+# Augmentation & regularization parameters
+no_aug: true
+scale: 
+- 0.08
+- 1.0
+ratio: 
+- 0.75
+- 1.3333333333333333
+hflip: 0.5
+vflip: 0.5
+color_jitter: 0.4
+aa: null
+aug_repeats: 0
+aug_splits: 0
+jsd_loss: false
+bce_loss: false
+bce_target_thresh: null
+reprob: 0.0
+remode: pixel
+recount: 1
+resplit: false
+mixup: 0.0
+cutmix: 0.0
+cutmix_minmax: null
+mixup_prob: 1.0
+mixup_switch_prob: 0.5
+mixup_mode: batch
+mixup_off_epoch: 0
+smoothing: null
+train_interpolation: random
+drop: 0.0
+drop_connect: null
+drop_path: null
+drop_block: null
+
+# Batch norm parameters
+bn_momentum: null
+bn_eps: null
+sync_bn: false
+dist_bn: reduce
+split_bn: false
+
+# Model Exponential Moving Average
+model_ema: false
+model_ema_force_cpu: false
+model_ema_decay: 0.9998
+
+# Misc
+seed: 42
+worker_seeding: all
+log_interval: 50
+recovery_interval: 0
+checkpoint_hist: 10
+workers: 8
+save_images: false
+amp: false
+amp_dtype: float16
+amp_impl: native
+no_ddp_bb: false
+synchronize_step: false
+pin_mem: false
+no_prefetcher: false
+output: ''
+experiment: ''
+eval_metric: top1
+tta: 0
+local_rank: 0
+use_multi_epochs_loader: false
+log_wandb: false
