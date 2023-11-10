@@ -25,11 +25,11 @@ from timm.scheduler import create_scheduler_v2, scheduler_kwargs
 from timm.utils import ApexScaler, NativeScaler
 
 
-from data.dataloader import cwd_splitter, cwd_loader, CWD_Dataset
+from data.dataloader import cwd_splitter, cwd_loader, CWD_Dataset, CWD_Dataset_Filter
 from data.dataloader import inat_files, iNatDataset, inat_loader
 
 # only make gpu 3 visible
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 from conf.argparser import _parse_args
 
@@ -126,7 +126,7 @@ def main():
     if args.local_pretrained and args.pretrained:
         ptcfg.url = None
         ptcfg.file = args.local_pretrained
-        ptcfg.num_classes = 30
+        ptcfg.num_classes = args.pretrained_num_classes
 
 
     model = create_model(
@@ -145,6 +145,7 @@ def main():
         # checkpoint_path=args.initial_checkpoint,
         **args.model_kwargs,
     )
+    print(f'Model {args.model}')
 
     # if args.initial_checkpoint:
     #     print("====================================")
@@ -308,7 +309,21 @@ def main():
     train_files, val_files, dir_to_label = inat_files(args.data_dir)
     dataset_train = iNatDataset(train_files, dir2lbl=dir_to_label, transform=None)
     dataset_eval = iNatDataset(val_files, dir2lbl=dir_to_label, transform=None)
+    print('LOADING iNatural is successful!')
     
+
+    #create train eval dataset for different Angle 
+    #angle_type = 90
+    #dataset_train = CWD_Dataset_Filter(phase='train',angle_type=angle_type)
+    #dataset_eval = CWD_Dataset_Filter(phase='test',angle_type=angle_type)
+    #print(f'LOADING CWD30 Angle {angle_type} is successful!')
+
+    #create train eval dataset for different stages 
+    # growth_stage = 'early'
+    # dataset_train = CWD_Dataset_Filter(phase='train',angle=False, growth=True,growth_type=growth_stage)
+    # dataset_eval = CWD_Dataset_Filter(phase='test',angle=False, growth=True, growth_type=growth_stage)
+    # print(f'LOADING CWD30 Stage {growth_stage} is successful!')
+
     # dataset_train = create_dataset(
     #     args.dataset,
     #     root=args.data_dir,
@@ -505,6 +520,14 @@ def main():
                 dataset_train.set_epoch(epoch)
             elif args.distributed and hasattr(loader_train.sampler, 'set_epoch'):
                 loader_train.sampler.set_epoch(epoch)
+
+            eval_metrics = validate(
+                model,
+                loader_eval,
+                validate_loss_fn,
+                args,
+                amp_autocast=amp_autocast,
+            )
 
             train_metrics = train_one_epoch(
                 epoch,
@@ -811,3 +834,10 @@ def validate(
 
 if __name__ == '__main__':
     main()
+    ddddddddddd
+    dddddddddd
+
+
+
+
+    ddddddddddddddddd
