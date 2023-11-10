@@ -834,10 +834,3 @@ def validate(
 
 if __name__ == '__main__':
     main()
-    ddddddddddd
-    dddddddddd
-
-
-
-
-    ddddddddddddddddd
