@@ -8,13 +8,13 @@ dataset_download: false
 class_map: ''
 
 # Model parameters
-model: efficientnet_b5
+model: vit_base_patch16_224.augreg2_in21k_ft_in1k
 pretrained: true
 initial_checkpoint: ''
-local_pretrained: ''
+local_pretrained: '/data_hdd1/users/Talha/cwd_chkpts/clf_cwd.vit_base_patch16_224.augreg2_in21k_ft_in1k.pth'
 resume: ''
 no_resume_opt: false
-pretrained_num_classes: 4271
+pretrained_num_classes: 30
 num_classes: 4271
 gp: null
 img_size: null
@@ -24,7 +24,7 @@ crop_pct: null
 mean: null
 std: null
 interpolation: ''
-batch_size: 16
+batch_size: 32
 validation_batch_size: null
 channels_last: false
 fuser: ''
