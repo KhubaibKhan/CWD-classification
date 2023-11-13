@@ -13,6 +13,7 @@ convnext_tiny: 'convnext_tiny.fb_in1k'
 # ViT
 tiny_vit_21m_224: 'tiny_vit_21m_224.dist_in22k_ft_in1k'
 vit_base_patch16_224: 'vit_base_patch16_224.augreg2_in21k_ft_in1k'
+vit_large_patch32_224: 'vit_large_patch32_224.augreg2_in21k_ft_in1k'
 cait_xxs36_224: 'cait_xxs36_224.fb_dist_in1k'
 cait_s24_224: 'cait_s24_224.fb_dist_in1k'
 swin_s3_tiny_224: 'swin_s3_tiny_224.ms_in1k'

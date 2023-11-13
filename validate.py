@@ -26,14 +26,14 @@ from timm.data import create_dataset, create_loader, resolve_data_config, RealLa
 from timm.layers import apply_test_time_pool, set_fast_norm
 from timm.models import create_model, load_checkpoint, is_model, list_models
 from timm.utils import accuracy, AverageMeter, natural_key, setup_default_logging, set_jit_fuser, \
-    decay_batch_step, check_batch_size_retry, ParseKwargs, reparameterize_model
+    decay_batch_step, check_batch_size_retry, ParseKwargs #, reparameterize_model
 
 
-from data.dataloader import cwd_splitter, cwd_loader, CWD_Dataset
+from data.dataloader import cwd_splitter, cwd_loader, CWD_Dataset, CWD_Dataset_Filter
 from data.dataloader import inat_files, iNatDataset, inat_loader
 
 # only make gpu 3 visible
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
 
@@ -84,7 +84,7 @@ parser.add_argument('--in-chans', type=int, default=None, metavar='N',
                     help='Image input channels (default: None => 3)')
 parser.add_argument('--input-size', default=None, nargs=3, type=int,
                     metavar='N N N', help='Input all image dimensions (d h w, e.g. --input-size 3 224 224), uses model default if empty')
-parser.add_argument('--use-train-size', action='store_true', default=False,
+parser.add_argument('--use-train-size', action='store_true', default=True,
                     help='force use of train input size, even when test size is specified in pretrained cfg')
 parser.add_argument('--crop-pct', default=None, type=float,
                     metavar='N', help='Input image center crop pct')
@@ -258,8 +258,11 @@ def validate(args):
     criterion = nn.CrossEntropyLoss().to(device)
 
     root_dir = args.data or args.data_dir
-    train_files, val_files, dir_to_label = inat_files(args.data_dir)
-    dataset = iNatDataset(val_files, dir2lbl=dir_to_label, transform=None)
+    # train_files, val_files, dir_to_label = inat_files(args.data_dir)
+    # dataset = iNatDataset(val_files, dir2lbl=dir_to_label, transform=None)
+    # train_dict, test_dict = cwd_splitter(args.data_dir, 0.8)
+    # # dataset_train = CWD_Dataset(train_dict)
+    # dataset = CWD_Dataset(test_dict)
     # dataset = create_dataset(
     #     root=root_dir,
     #     name=args.dataset,
@@ -268,6 +271,19 @@ def validate(args):
     #     load_bytes=args.tf_preprocessing,
     #     class_map=args.class_map,
     # )
+
+    #create train eval dataset for different Angle 
+    #angle_type = 0
+    #dataset_train = CWD_Dataset_Filter(phase='train',angle_type=angle_type)
+    #dataset = CWD_Dataset_Filter(phase='test',angle_type=angle_type)
+    #print(f'LOADING CWD30 Angle {angle_type} is successful!')
+
+
+    #create train eval dataset for different stages 
+    growth_stage = 'early'
+    #dataset_train = CWD_Dataset_Filter(phase='train',angle=False, growth=True,growth_type=growth_stage)
+    dataset = CWD_Dataset_Filter(phase='test',angle=False, growth=True, growth_type=growth_stage)
+    print(f'LOADING CWD30 Stage {growth_stage} is successful!')
 
     if args.valid_labels:
         with open(args.valid_labels, 'r') as f:
