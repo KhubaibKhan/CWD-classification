@@ -8,6 +8,12 @@ from timm.models import create_model
 
 # CNN models
 def  ResNet101(args):
+    if args.local_pretrained and args.pretrained:
+        resnet101 = models.resnet101()
+        checkpoint = torch.load(args.local_pretrained, map_location='cpu')
+        resnet101.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        print(f"Model {args.model} loaded with pretrained weights")
+        
     if args.pretrained:
         resnet101 = models.resnet101(weights='DEFAULT')
         print("Model {args.model} loaded with pretrained weights")
@@ -18,6 +24,12 @@ def  ResNet101(args):
     return resnet101
 
 def  EfficientNet_v2_m(args):
+    if args.local_pretrained and args.pretrained:
+        efficientnet_v2_m = models.efficientnet_v2_m()
+        checkpoint = torch.load(args.local_pretrained, map_location='cpu')
+        efficientnet_v2_m.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        print(f"Model {args.model} loaded with pretrained weights")
+        
     if args.pretrained:
         efficientnet_v2_m = models.efficientnet_v2_m(weights='DEFAULT')
         print("Model {args.model} loaded with pretrained weights")
@@ -28,6 +40,12 @@ def  EfficientNet_v2_m(args):
     return efficientnet_v2_m
 
 def  MobileNet_v3_large(args):
+    if args.local_pretrained and args.pretrained:
+        mobilenet_v3_large = models.mobilenet_v3_large()
+        checkpoint = torch.load(args.local_pretrained, map_location='cpu')
+        mobilenet_v3_large.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        print(f"Model {args.model} loaded with pretrained weights")
+        
     if args.pretrained:
         mobilenet_v3_large = models.mobilenet_v3_large(weights='DEFAULT')
         print("Model {args.model} loaded with pretrained weights")
@@ -38,6 +56,12 @@ def  MobileNet_v3_large(args):
     return mobilenet_v3_large
 
 def  ResNext101_32x8d(args):
+    if args.local_pretrained and args.pretrained:
+        resnext101_32x8d = models.resnext101_32x8d()
+        checkpoint = torch.load(args.local_pretrained, map_location='cpu')
+        resnext101_32x8d.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        print(f"Model {args.model} loaded with pretrained weights")
+        
     if args.pretrained:
         resnext101_32x8d = models.resnext101_32x8d(weights='DEFAULT')
         print("Model {args.model} loaded with pretrained weights")
@@ -50,6 +74,12 @@ def  ResNext101_32x8d(args):
 
 # Transformer models
 def  Swin_b(args):
+    if args.local_pretrained and args.pretrained:
+        swin_b = models.swin_b()
+        checkpoint = torch.load(args.local_pretrained, map_location='cpu')
+        swin_b.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        print(f"Model {args.model} loaded with pretrained weights")
+        
     if args.pretrained:
         swin_b = models.swin_b(weights='DEFAULT')
         print("Model {args.model} loaded with pretrained weights")
@@ -60,6 +90,12 @@ def  Swin_b(args):
     return swin_b
 
 def  ViT_l_32(args):
+    if args.local_pretrained and args.pretrained:
+        vit_l_32 = models.vit_l_32()
+        checkpoint = torch.load(args.local_pretrained, map_location='cpu')
+        vit_l_32.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        print(f"Model {args.model} loaded with pretrained weights")
+        
     if args.pretrained:
         vit_l_32 = models.vit_l_32(weights='DEFAULT')
         print("Model {args.model} loaded with pretrained weights")
@@ -71,6 +107,12 @@ def  ViT_l_32(args):
 
 def  MaxViT_t(args):
 
+    if args.local_pretrained and args.pretrained:
+        maxvit_t = models.maxvit_t()
+        checkpoint = torch.load(args.local_pretrained, map_location='cpu')
+        maxvit_t.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        print(f"Model {args.model} loaded with pretrained weights")
+        
     if args.pretrained:
         maxvit_t = models.maxvit_t(weights='DEFAULT')
         print(f"Model {args.model} loaded with pretrained weights")
@@ -117,6 +159,7 @@ def timm_model(args):
         checkpoint = torch.load(args.local_pretrained, map_location='cpu')
         timm_model.load_state_dict(checkpoint['model_state_dict'], strict=False)
         print(f"Model {args.model} loaded with pretrained weights")
+        # print all the keys matched
 
         # change the last layer
         if args.pretrained_num_classes != args.num_classes:

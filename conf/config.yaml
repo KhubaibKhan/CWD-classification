@@ -8,14 +8,14 @@ dataset_download: false
 class_map: ''
 
 # Model parameters
-model: vit_base_patch16_224.augreg2_in21k_ft_in1k
+model: resnet101.a1_in1k
 pretrained: true
 initial_checkpoint: ''
-local_pretrained: '/data_hdd1/users/Talha/cwd_chkpts/clf_cwd.vit_base_patch16_224.augreg2_in21k_ft_in1k.pth'
+local_pretrained: ''
 resume: ''
 no_resume_opt: false
 pretrained_num_classes: 30
-num_classes: 4271
+num_classes: 30
 gp: null
 img_size: null
 in_chans: null
@@ -24,7 +24,7 @@ crop_pct: null
 mean: null
 std: null
 interpolation: ''
-batch_size: 32
+batch_size: 128
 validation_batch_size: null
 channels_last: false
 fuser: ''
@@ -40,7 +40,7 @@ torchscript: false
 torchcompile: null
 
 # Optimizer parameters
-opt: adam
+opt: adamw
 opt_eps: null
 opt_betas: null
 momentum: 0.9
@@ -53,7 +53,7 @@ opt_kwargs: {}
 # Learning rate schedule parameters
 sched: cosine
 sched_on_updates: false
-lr: 0.001
+lr: 1.0e-4
 lr_base: 0.1
 lr_base_size: 256
 lr_base_scale: ''
@@ -64,7 +64,7 @@ lr_cycle_mul: 1.0
 lr_cycle_decay: 0.5
 lr_cycle_limit: 1
 lr_k_decay: 1.0
-warmup_lr: 1.0e-3
+warmup_lr: 1.0e-5
 min_lr: 0
 epochs: 30
 epoch_repeats: 0.0
@@ -74,7 +74,7 @@ decay_milestones:
 - 180
 - 270
 decay_epochs: 90
-warmup_epochs: 5
+warmup_epochs: 2
 warmup_prefix: false
 cooldown_epochs: 0
 patience_epochs: 10
@@ -148,4 +148,4 @@ eval_metric: top1
 tta: 0
 local_rank: 0
 use_multi_epochs_loader: false
-log_wandb: false
+log_wandb: true

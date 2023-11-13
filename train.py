@@ -31,7 +31,7 @@ from models.models import get_model
 from utils.utils import *
 
 # only make gpu 3 visible
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 from conf.argparser import _parse_args
 
@@ -197,11 +197,18 @@ def main():
                 f'Learning rate ({args.lr}) calculated from base learning rate ({args.lr_base}) '
                 f'and effective global batch size ({global_batch_size}) with {args.lr_base_scale} scaling.')
 
+    
     optimizer = create_optimizer_v2(
         model,
         **optimizer_kwargs(cfg=args),
         **args.opt_kwargs,
     )
+    # get the lr from optimizer param group
+    lr = optimizer.param_groups[0]['lr']
+    print("########################################")
+    print(lr)
+    print(args.opt)
+    print("########################################")
 
     # Inspect the optimizer's parameter groups 
     # if number of parameters in optimizer and model are not equal,
@@ -304,6 +311,18 @@ def main():
     #dataset_eval = CWD_Dataset_Filter(phase='test',angle_type=angle_type)
     #print(f'LOADING CWD30 Angle {angle_type} is successful!')
 
+    #angle_type = 0 + 45
+    """ train_1 = CWD_Dataset_Filter(phase='train',angle_type=0)
+    train_2 = CWD_Dataset_Filter(phase='train',angle_type=45)
+    dataset_train = torch.utils.data.ConcatDataset([train_1,train_2])
+    eval_1 = CWD_Dataset_Filter(phase='test',angle_type=0)
+    eval_2 = CWD_Dataset_Filter(phase='test',angle_type=45)
+    dataset_eval = torch.utils.data.ConcatDataset([eval_1,eval_2])
+    print(f'LOADING CWD30 Angle 0 and 45 is successful!') """
+
+    #angle_type = 0 + 90
+    #angle_type = 45 + 90
+
     #create train eval dataset for different stages 
     # growth_stage = 'early'
     # dataset_train = CWD_Dataset_Filter(phase='train',angle=False, growth=True,growth_type=growth_stage)
@@ -321,6 +340,7 @@ def main():
     #     seed=args.seed,
     #     repeats=args.epoch_repeats,
     # )
+
 
     # dataset_eval = create_dataset(
     #     args.dataset,
