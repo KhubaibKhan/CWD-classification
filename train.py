@@ -25,7 +25,7 @@ from timm.scheduler import create_scheduler_v2, scheduler_kwargs
 from timm.utils import ApexScaler, NativeScaler
 
 
-from data.dataloader import cwd_splitter, cwd_loader, CWD_Dataset, CWD_Dataset_Filter
+from data.dataloader import cwd_splitter, cwd_loader, CWD_Dataset, CWD_Dataset_Filter, CWD_Dataset_Multiple
 from data.dataloader import inat_files, iNatDataset, inat_loader
 from models.models import get_model
 from utils.utils import *
@@ -299,10 +299,10 @@ def main():
     # dataset_eval = CWD_Dataset(test_dict)
 
     # create the train and eval datasets for iNat dataset
-    train_files, val_files, dir_to_label = inat_files(args.data_dir)
-    dataset_train = iNatDataset(train_files, dir2lbl=dir_to_label, transform=None)
-    dataset_eval = iNatDataset(val_files, dir2lbl=dir_to_label, transform=None)
-    print('LOADING iNatural is successful!')
+    #train_files, val_files, dir_to_label = inat_files(args.data_dir)
+    #dataset_train = iNatDataset(train_files, dir2lbl=dir_to_label, transform=None)
+    #dataset_eval = iNatDataset(val_files, dir2lbl=dir_to_label, transform=None)
+    #print('LOADING iNatural is successful!')
     
 
     #create train eval dataset for different Angle 
@@ -311,17 +311,16 @@ def main():
     #dataset_eval = CWD_Dataset_Filter(phase='test',angle_type=angle_type)
     #print(f'LOADING CWD30 Angle {angle_type} is successful!')
 
-    #angle_type = 0 + 45
-    """ train_1 = CWD_Dataset_Filter(phase='train',angle_type=0)
-    train_2 = CWD_Dataset_Filter(phase='train',angle_type=45)
-    dataset_train = torch.utils.data.ConcatDataset([train_1,train_2])
-    eval_1 = CWD_Dataset_Filter(phase='test',angle_type=0)
-    eval_2 = CWD_Dataset_Filter(phase='test',angle_type=45)
-    dataset_eval = torch.utils.data.ConcatDataset([eval_1,eval_2])
-    print(f'LOADING CWD30 Angle 0 and 45 is successful!') """
+    #angle_type = [0]
+    #dataset_train = CWD_Dataset_Multiple(phase='train',angle_type=angle_type)
+    #dataset_eval = CWD_Dataset_Multiple(phase='test',angle_type=angle_type)
+    #print(f'LOADING CWD30 Angle 0 is successful!')
 
-    #angle_type = 0 + 90
-    #angle_type = 45 + 90
+
+    growth_stage = ['middle','late']
+    dataset_train = CWD_Dataset_Multiple(phase='train',angle=False, growth=True,growth_type=growth_stage)
+    dataset_eval = CWD_Dataset_Multiple(phase='test',angle=False, growth=True, growth_type=growth_stage)
+    print(f'LOADING CWD30 Stages {growth_stage[0]} and {growth_stage[1]} is successful!')
 
     #create train eval dataset for different stages 
     # growth_stage = 'early'

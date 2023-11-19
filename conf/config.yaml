@@ -11,7 +11,7 @@ class_map: ''
 model: resnet101.a1_in1k
 pretrained: true
 initial_checkpoint: ''
-local_pretrained: ''
+local_pretrained: './output/train/20231115-140542-resnet101_a1_in1k-224/checkpoint-29.pth.tar'
 resume: ''
 no_resume_opt: false
 pretrained_num_classes: 30
@@ -40,7 +40,7 @@ torchscript: false
 torchcompile: null
 
 # Optimizer parameters
-opt: adamw
+opt: adam #adamw 
 opt_eps: null
 opt_betas: null
 momentum: 0.9
@@ -149,3 +149,4 @@ tta: 0
 local_rank: 0
 use_multi_epochs_loader: false
 log_wandb: true
+device: cuda

@@ -123,6 +123,8 @@ group.add_argument('--lr-base', type=float, default=0.1, metavar='LR',
                    help='base learning rate: lr = lr_base * global_batch_size / base_size')
 group.add_argument('--lr-base-size', type=int, default=256, metavar='DIV',
                    help='base learning rate batch size (divisor, default: 256).')
+group.add_argument('--device', type=str, default='cuda', metavar='DIV',
+                   help='GPU or CPU')
 group.add_argument('--lr-base-scale', type=str, default='', metavar='SCALE',
                    help='base learning rate vs batch_size scaling ("linear", "sqrt", based on opt if empty)')
 group.add_argument('--lr-noise', type=float, nargs='+', default=None, metavar='pct, pct',
@@ -290,6 +292,42 @@ group.add_argument('--use-multi-epochs-loader', action='store_true', default=Fal
                    help='use the multi-epochs-loader to save time at the beginning of every epoch')
 group.add_argument('--log-wandb', action='store_true', default=False,
                    help='log training and validation metrics to wandb')
+
+# validation arguments
+group.add_argument_group('Validation parameters')
+group.add_argument('--split', metavar='NAME', default='validation',
+                    help='dataset split (default: validation)')
+group.add_argument('--use-train-size', action='store_true', default=True,
+                    help='force use of train input size, even when test size is specified in pretrained cfg')
+group.add_argument('--crop-mode', default=None, type=str,
+                    metavar='N', help='Input image crop mode (squash, border, center). Model default if None.')
+group.add_argument('--log-freq', default=10, type=int,
+                    metavar='N', help='batch logging frequency (default: 10)')
+group.add_argument('--checkpoint', default='', type=str, metavar='PATH',
+                    help='path to latest checkpoint (default: none)')
+group.add_argument('--num-gpu', type=int, default=1,
+                    help='Number of GPUS to use')
+group.add_argument('--test-pool', dest='test_pool', action='store_true',
+                    help='enable test time pool')
+group.add_argument('--tf-preprocessing', action='store_true', default=False,
+                    help='Use Tensorflow preprocessing pipeline (require CPU TF installed')
+group.add_argument('--use-ema', dest='use_ema', action='store_true',
+                    help='use ema version of weights if present')
+group.add_argument('--reparam', default=False, action='store_true',
+                    help='Reparameterize model')
+group.add_argument('--aot-autograd', default=False, action='store_true',
+                             help="Enable AOT Autograd support.")
+
+group.add_argument('--results-file', default='', type=str, metavar='FILENAME',
+                    help='Output csv file for validation results (summary)')
+group.add_argument('--results-format', default='csv', type=str,
+                    help='Format for results file one of (csv, json) (default: csv).')
+group.add_argument('--real-labels', default='', type=str, metavar='FILENAME',
+                    help='Real labels JSON file for imagenet evaluation')
+group.add_argument('--valid-labels', default='', type=str, metavar='FILENAME',
+                    help='Valid label indices txt file for validation of partial label space')
+group.add_argument('--retry', default=False, action='store_true',
+                    help='Enable batch size decay & retry for single model validation')
 
 
 def _parse_args():

@@ -10,65 +10,90 @@ from timm.models import create_model
 def  ResNet101(args):
     if args.local_pretrained and args.pretrained:
         resnet101 = models.resnet101()
+        resnet101.fc = nn.Linear(resnet101.fc.in_features, args.num_classes)
         checkpoint = torch.load(args.local_pretrained, map_location='cpu')
-        resnet101.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        if args.local_pretrained.endswith('.pth.tar'):
+            resnet101.load_state_dict(checkpoint['state_dict'])
+        else:
+            resnet101.load_state_dict(checkpoint['model_state_dict'])
         print(f"Model {args.model} loaded with pretrained weights")
+        print("===========================================================")
+        print("===========================================================")
+        print("===========================================================")
         
-    if args.pretrained:
+    elif args.pretrained:
         resnet101 = models.resnet101(weights='DEFAULT')
-        print("Model {args.model} loaded with pretrained weights")
+        resnet101.fc = nn.Linear(resnet101.fc.in_features, args.num_classes)
+        print(f"Model {args.model} loaded with pretrained weights")
     else:
         resnet101 = models.resnet101(weights=None)
-    resnet101.fc = nn.Linear(resnet101.fc.in_features, args.num_classes)
+        resnet101.fc = nn.Linear(resnet101.fc.in_features, args.num_classes)
+    
     
     return resnet101
 
 def  EfficientNet_v2_m(args):
     if args.local_pretrained and args.pretrained:
         efficientnet_v2_m = models.efficientnet_v2_m()
+        efficientnet_v2_m.classifier[1] = nn.Linear(efficientnet_v2_m.classifier[1].in_features, args.num_classes)
         checkpoint = torch.load(args.local_pretrained, map_location='cpu')
-        efficientnet_v2_m.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        if args.local_pretrained.endswith('.pth.tar'):
+            efficientnet_v2_m.load_state_dict(checkpoint['state_dict'])
+        else:
+            efficientnet_v2_m.load_state_dict(checkpoint['model_state_dict'])
         print(f"Model {args.model} loaded with pretrained weights")
         
-    if args.pretrained:
+    elif args.pretrained:
         efficientnet_v2_m = models.efficientnet_v2_m(weights='DEFAULT')
         print("Model {args.model} loaded with pretrained weights")
+        efficientnet_v2_m.classifier[1] = nn.Linear(efficientnet_v2_m.classifier[1].in_features, args.num_classes)
     else:
         efficientnet_v2_m = models.efficientnet_v2_m(weights=None)
-    efficientnet_v2_m.classifier[1] = nn.Linear(efficientnet_v2_m.classifier[1].in_features, args.num_classes)
+        efficientnet_v2_m.classifier[1] = nn.Linear(efficientnet_v2_m.classifier[1].in_features, args.num_classes)
+    
 
     return efficientnet_v2_m
 
 def  MobileNet_v3_large(args):
     if args.local_pretrained and args.pretrained:
         mobilenet_v3_large = models.mobilenet_v3_large()
+        mobilenet_v3_large.classifier[3] = nn.Linear(mobilenet_v3_large.classifier[3].in_features, args.num_classes)
         checkpoint = torch.load(args.local_pretrained, map_location='cpu')
-        mobilenet_v3_large.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        if args.local_pretrained.endswith('.pth.tar'):
+            mobilenet_v3_large.load_state_dict(checkpoint['state_dict'])
+        else:
+            mobilenet_v3_large.load_state_dict(checkpoint['model_state_dict'])
         print(f"Model {args.model} loaded with pretrained weights")
         
-    if args.pretrained:
+    elif args.pretrained:
         mobilenet_v3_large = models.mobilenet_v3_large(weights='DEFAULT')
+        mobilenet_v3_large.classifier[3] = nn.Linear(mobilenet_v3_large.classifier[3].in_features, args.num_classes)
         print("Model {args.model} loaded with pretrained weights")
     else:
         mobilenet_v3_large = models.mobilenet_v3_large(weights=None)
-    mobilenet_v3_large.classifier[3] = nn.Linear(mobilenet_v3_large.classifier[3].in_features, args.num_classes)
+        mobilenet_v3_large.classifier[3] = nn.Linear(mobilenet_v3_large.classifier[3].in_features, args.num_classes)
+    
 
     return mobilenet_v3_large
 
 def  ResNext101_32x8d(args):
     if args.local_pretrained and args.pretrained:
         resnext101_32x8d = models.resnext101_32x8d()
+        resnext101_32x8d.fc = nn.Linear(resnext101_32x8d.fc.in_features, args.num_classes)
         checkpoint = torch.load(args.local_pretrained, map_location='cpu')
-        resnext101_32x8d.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        if args.local_pretrained.endswith('.pth.tar'):
+            resnext101_32x8d.load_state_dict(checkpoint['state_dict'])
+        else:
+            resnext101_32x8d.load_state_dict(checkpoint['model_state_dict'])
         print(f"Model {args.model} loaded with pretrained weights")
         
-    if args.pretrained:
+    elif args.pretrained:
         resnext101_32x8d = models.resnext101_32x8d(weights='DEFAULT')
+        resnext101_32x8d.fc = nn.Linear(resnext101_32x8d.fc.in_features, args.num_classes)
         print("Model {args.model} loaded with pretrained weights")
     else:
         resnext101_32x8d = models.resnext101_32x8d(weights=None)
-
-    resnext101_32x8d.fc = nn.Linear(resnext101_32x8d.fc.in_features, args.num_classes)
+        resnext101_32x8d.fc = nn.Linear(resnext101_32x8d.fc.in_features, args.num_classes)
 
     return resnext101_32x8d
 
@@ -76,32 +101,44 @@ def  ResNext101_32x8d(args):
 def  Swin_b(args):
     if args.local_pretrained and args.pretrained:
         swin_b = models.swin_b()
+        swin_b.head = nn.Linear(swin_b.head.in_features, args.num_classes)
         checkpoint = torch.load(args.local_pretrained, map_location='cpu')
-        swin_b.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        if args.local_pretrained.endswith('.pth.tar'):
+            swin_b.load_state_dict(checkpoint['state_dict'])
+        else:
+            swin_b.load_state_dict(checkpoint['model_state_dict'])
         print(f"Model {args.model} loaded with pretrained weights")
         
-    if args.pretrained:
+    elif args.pretrained:
         swin_b = models.swin_b(weights='DEFAULT')
+        swin_b.head = nn.Linear(swin_b.head.in_features, args.num_classes)
         print("Model {args.model} loaded with pretrained weights")
     else:
         swin_b = models.swin_b(weights=None)
-    swin_b.head = nn.Linear(swin_b.head.in_features, args.num_classes)
+        swin_b.head = nn.Linear(swin_b.head.in_features, args.num_classes)
+    
 
     return swin_b
 
 def  ViT_l_32(args):
     if args.local_pretrained and args.pretrained:
         vit_l_32 = models.vit_l_32()
+        vit_l_32.heads[0] = nn.Linear(vit_l_32.heads[0].in_features, args.num_classes)
         checkpoint = torch.load(args.local_pretrained, map_location='cpu')
-        vit_l_32.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        if args.local_pretrained.endswith('.pth.tar'):
+            vit_l_32.load_state_dict(checkpoint['state_dict'])
+        else:
+            vit_l_32.load_state_dict(checkpoint['model_state_dict'])
         print(f"Model {args.model} loaded with pretrained weights")
         
-    if args.pretrained:
+    elif args.pretrained:
         vit_l_32 = models.vit_l_32(weights='DEFAULT')
+        vit_l_32.heads[0] = nn.Linear(vit_l_32.heads[0].in_features, args.num_classes)
         print("Model {args.model} loaded with pretrained weights")
     else:
         vit_l_32 = models.vit_l_32(weights=None)
-    vit_l_32.heads[0] = nn.Linear(vit_l_32.heads[0].in_features, args.num_classes)
+        vit_l_32.heads[0] = nn.Linear(vit_l_32.heads[0].in_features, args.num_classes)
+    
 
     return vit_l_32
 
@@ -109,16 +146,22 @@ def  MaxViT_t(args):
 
     if args.local_pretrained and args.pretrained:
         maxvit_t = models.maxvit_t()
+        maxvit_t.classifier[5] = nn.Linear(maxvit_t.classifier[5].in_features, args.num_classes)
         checkpoint = torch.load(args.local_pretrained, map_location='cpu')
-        maxvit_t.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        if args.local_pretrained.endswith('.pth.tar'):
+            maxvit_t.load_state_dict(checkpoint['state_dict'])
+        else:
+            maxvit_t.load_state_dict(checkpoint['model_state_dict'])
         print(f"Model {args.model} loaded with pretrained weights")
         
-    if args.pretrained:
+    elif args.pretrained:
         maxvit_t = models.maxvit_t(weights='DEFAULT')
+        maxvit_t.classifier[5] = nn.Linear(maxvit_t.classifier[5].in_features, args.num_classes)
         print(f"Model {args.model} loaded with pretrained weights")
     else:
         maxvit_t = models.maxvit_t(weights=None)
-    maxvit_t.classifier[5] = nn.Linear(maxvit_t.classifier[5].in_features, args.num_classes)
+        maxvit_t.classifier[5] = nn.Linear(maxvit_t.classifier[5].in_features, args.num_classes)
+    
 
     return maxvit_t
 
@@ -157,7 +200,10 @@ def timm_model(args):
     # load the checkpoint if pretrained=True
     if args.local_pretrained and args.pretrained:
         checkpoint = torch.load(args.local_pretrained, map_location='cpu')
-        timm_model.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        if args.local_pretrained.endswith('.pth.tar'):
+            timm_model.load_state_dict(checkpoint['state_dict'])
+        else:
+            timm_model.load_state_dict(checkpoint['model_state_dict'])
         print(f"Model {args.model} loaded with pretrained weights")
         # print all the keys matched
 

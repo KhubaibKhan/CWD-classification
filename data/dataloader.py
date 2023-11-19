@@ -179,3 +179,66 @@ class CWD_Dataset_Filter(data.Dataset):
             img = self.transform(img)
 
         return img, int(self.labels[index])
+
+
+class CWD_Dataset_Multiple(data.Dataset):
+    def __init__(self, data_dict=None, transform=None, phase='train', angle=True, angle_type=[0,45], growth=False, growth_type=['early','middle'], split=0) -> None: 
+        #angle_type: 0 -> 0 degree, 45 -> 45 degree, 90 -> 90 degree
+        #growth_type: 0 -> early, 1 -> middle, 2 -> late
+        #split: 0 -> 70:30, 1-> 60:40 , 2 -> 33:33:34
+        super().__init__()
+        self.phase = phase
+        self.angle = angle
+        self.angle_type = angle_type
+        self.growth = growth
+        self.growth_type = growth_type
+        self.split = 0
+        self.data_dir = '/data_hdd1/users/Talha/data/cwd30/dataset'
+        if self.split==0:
+            self.spt = '70_30'
+        elif self.split==1:
+            self.spt = '60_40'
+        elif self.split==2:
+            self.spt = '33_33_34'
+
+        self.__get_path()
+
+        self.transform = transform
+        self.data_dict = data_dict
+    
+    def __get_path(self):
+        self.img_paths = []
+        self.labels = []
+        if self.angle:
+            for theta in self.angle_type:
+                pth = self.phase + '_d'+str(theta)+'_s'+self.spt+'.txt'
+                img_list = self.__read_txt('/data_hdd1/users/DEWA/Crop-weeds-classification/dt_split_degree/'+pth)
+                gt_list = self.__read_txt('/data_hdd1/users/DEWA/Crop-weeds-classification/dt_split_degree/'+self.phase + '_gt_d'+str(theta)+'_s'+self.spt+'.txt')
+                self.labels.extend(gt_list)
+                self.img_paths.extend([os.path.join(self.data_dir, item) for item in img_list])
+        
+        if self.growth:
+            for stage in self.growth_type:
+                pth = self.phase + '_'+stage+'_s'+self.spt+'.txt'
+                img_list = self.__read_txt('/data_hdd1/users/DEWA/Crop-weeds-classification/dt_split_stage/'+pth)
+                gt_list = self.__read_txt('/data_hdd1/users/DEWA/Crop-weeds-classification/dt_split_stage/'+self.phase + '_gt_'+stage+'_s'+self.spt+'.txt')
+                self.labels.extend(gt_list)
+                self.img_paths.extend([os.path.join(self.data_dir, item) for item in img_list])
+
+
+    def __read_txt(self,path):
+        with open(path) as f:
+            list = [line.strip() for line in f.readlines()]
+        return list
+
+    def __len__(self):
+        return len(self.img_paths)
+    
+    def __getitem__(self, index):
+        img_name = self.img_paths[index]
+        img = Image.open(img_name).convert('RGB')
+
+        if self.transform:
+            img = self.transform(img)
+
+        return img, int(self.labels[index])
